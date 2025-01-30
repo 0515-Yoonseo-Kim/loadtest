@@ -1,0 +1,28 @@
+services:
+  mongo:
+    image: "mongo:latest"
+    container_name: "loadtest-mongo-server"
+    restart: "unless-stopped"
+    volumes: 
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+
+  redis:
+    image: "redis:latest"
+    container_name: "loadtest-redis-server"
+    restart: always
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    environment:
+      REDIS_LOGLEVEL: "verbose"
+    command: redis-server --bind 0.0.0.0
+
+volumes:
+  mongo_data:
+  redis_data:
