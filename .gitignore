@@ -1,0 +1,17 @@
+*/.env.*
+.DS_Store
+
+
+#front
+loadtest-frontend/.env.production
+loadtest-frontend/.npmrc
+loadtest-frontend/node_modules
+loadtest-frontend/.next/*
+
+#back
+loadtest-backend/node_modules
+loadtest-backend/.env
+loadtest-backend/dockerscript.sh
+
+#infra
+loadtest-infra/*

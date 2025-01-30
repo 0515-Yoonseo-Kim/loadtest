@@ -1,0 +1,11 @@
+
+> chat-app-frontend@1.0.0 start
+> next start
+
+   ▲ Next.js 15.1.5
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.0.8:3000
+
+ ✓ Starting...
+ ✓ Ready in 559ms
+Initializing Auth Service with API URL: http://localhost:5000

@@ -1,0 +1,18 @@
+
+> chat-app-frontend@1.0.0 dev
+> next dev -p 3000
+
+   ▲ Next.js 15.1.5
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.219.136:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 2.7s
+ ○ Compiling / ...
+ ✓ Compiled / in 4.5s (2644 modules)
+Initializing Auth Service with API URL: http://localhost:5000
+ GET / 200 in 5164ms
+ ✓ Compiled /login in 458ms (2648 modules)
+ ✓ Compiled /register in 251ms (2659 modules)
+[?25h
