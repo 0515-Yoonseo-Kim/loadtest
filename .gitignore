@@ -1,5 +1,6 @@
 */.env.*
 .DS_Store
+.env
 
 
 #front
@@ -7,11 +8,13 @@ loadtest-frontend/.env.production
 loadtest-frontend/.npmrc
 loadtest-frontend/node_modules
 loadtest-frontend/.next/*
+loadtest-frontend/logs/*
 
 #back
 loadtest-backend/node_modules
 loadtest-backend/.env
 loadtest-backend/dockerscript.sh
+loadtest-backend/logs/*
 
 #infra
 loadtest-infra/*
