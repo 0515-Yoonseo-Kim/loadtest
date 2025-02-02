@@ -4,7 +4,7 @@
 
 ---
 
-# Environment Variables 설정 가이드
+# 0. Environment Variables 설정 가이드
 **환경 변수(Environment Variables)** 설정 방법에 대한 예시 가이드(README.md 일부)입니다. 실제로 사용하시는 레포지토리나 프로젝트 구조에 맞춰 적절히 수정해서 사용하세요.
 
 이 프로젝트는 **MongoDB**, **Redis**, **OpenAI API** 등 외부 서비스와 연동하기 위해 여러 개의 환경 변수를 사용합니다.  
@@ -25,8 +25,8 @@
 | 변수명           | 설명                                                                    |
 |-----------------|-------------------------------------------------------------------------|
 | **NEXT_PUBLIC_API_URL**   | 백엔드 API 서버 주소 (예: http://localhost:5000 또는 도메인)           |
-| **NEXT_PUBLIC_ENCRYPTION_KEY**  | 특정 암호화 로직에 사용하는 키 (브라우저 단 암호화가 필요한 경우)                          |
-| **NEXT_PUBLIC_PASSWORD_SALT**  | 비밀번호 해싱 로직이 프론트에도 필요할 때 사용      |
+| **NEXT_PUBLIC_ENCRYPTION_KEY**  | 특정 암호화 로직에 사용하는 키 (백엔드 환경 변수와 동일)                          |
+| **NEXT_PUBLIC_PASSWORD_SALT**  | 비밀번호 해싱 로직이 (백엔드 환경 변수와 동일)      |
 
 ### 데이터베이스 환경 변수 
 	
@@ -37,6 +37,7 @@
 
 ## 1. 로컬 개발 환경(직접 실행 시)
 필요에 따라 실제 값(유저, 비밀번호, API 키)을 알맞게 수정하세요.
+### 1.1 환경 변수 설정
 
 1) loadtest/.env
 ```ìni
@@ -76,6 +77,13 @@ NEXT_PUBLIC_API_URL=http://localhost:5000
 NEXT_PUBLIC_ENCRYPTION_KEY=your_encryption_key
 NEXT_PUBLIC_PASSWORD_SALT=your_salt_key
 ```
+### 1.2 실행 커맨드
+```sh
+./run.sh start <모드>
+./run.sh stop <모드>
+./run.sh restart <모드>
+```
+모드는 `dev` `prod` 2가지이고 입력이 들어오지 않을 시 기본 값은 dev이다.
 
 ## 2. Docker Compose 환경에서 실행 시
 
@@ -128,7 +136,7 @@ PASSWORD_SALT=your_salt_key
 
 ### 2.3 실행 예시
 
-```bash
+```sh
 docker-compose up -d
 docker-compose down
 ```
