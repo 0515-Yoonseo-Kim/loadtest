@@ -3,7 +3,7 @@ services:
     image: "mongo:latest"
     container_name: "loadtest-mongo-server"
     restart: "unless-stopped"
-    volumes: 
+    volumes:
       - mongo_data:/data/db
     ports:
       - "27017:27017"
@@ -23,6 +23,35 @@ services:
       REDIS_LOGLEVEL: "verbose"
     command: redis-server --bind 0.0.0.0
 
+  backend:
+    build:
+      context: ./loadtest-backend
+      dockerfile: Dockerfile
+    container_name: loadtest-backend-server
+    restart: always
+    env_file:
+      - ./loadtest-backend/.env
+    volumes:
+      - ./loadtest-backend/logs:/app/logs
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+      - redis
+  frontend:
+    build:
+      context: ./loadtest-frontend
+      dockerfile: Dockerfile
+    container_name: loadtest-frontend-server
+    restart: always
+    env_file:
+      - ./loadtest-frontend/.env.local
+    volumes:
+      - ./loadtest-frontend/logs:/app/logs
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
 volumes:
   mongo_data:
   redis_data:
