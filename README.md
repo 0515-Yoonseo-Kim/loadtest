@@ -1,6 +1,6 @@
 # loadtest
 
-부하테스트 후속 프로젝트
+부하테스트 후속 프로젝트 : 해당 레포지토리의 코드를 수정했습니다. [https://github.com/extinctmule/ktb-BootcampChat]
 
 ---
 
