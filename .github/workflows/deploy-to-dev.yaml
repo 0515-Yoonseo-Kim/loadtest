@@ -49,7 +49,7 @@ jobs:
             echo "📂 Checking Git Repository..."
             if [ ! -d "/home/ec2-user/app/.git" ]; then
                 echo "🛠️ No Git repository found! Cloning..."
-                git clone https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPOSITORY.git /home/ec2-user/app
+                git clone https://github.com/0515-Yoonseo-Kim/loadtest.git
             else
                 echo "🔄 Pulling latest code..."
                 cd /home/ec2-user/app
