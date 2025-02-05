@@ -16,7 +16,7 @@ jobs:
 
       - name: Check SSH Connection
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.PUBLIC_IP }} "echo 'SSH 연결 성공!'"
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.PUBLIC_IP }} "echo 'SSH 연결 성공!'"
   deploy:
     runs-on: ubuntu-latest
     needs: ssh-check
