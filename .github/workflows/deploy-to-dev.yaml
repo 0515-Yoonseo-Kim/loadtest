@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - infra/*
-  workflow_dispatch:  # 수동 실행 가능
+  workflow_dispatch:
 
 jobs:
   ssh-check:
@@ -37,49 +37,37 @@ jobs:
           ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.PUBLIC_IP }} << 'EOF'
             set -e  # 에러 발생 시 즉시 종료
 
-            echo "🚀 Updating system packages..."
-            sudo yum update -y
-
-            echo "📌 Checking and installing Git..."
-            if ! command -v git &> /dev/null
-            then
-                sudo yum install -y git
-            fi
-
             echo "📂 Checking Git Repository..."
-            if [ ! -d "/home/ec2-user/app/.git" ]; then
-                echo "🛠️ No Git repository found! Cloning..."
-                git clone https://github.com/0515-Yoonseo-Kim/loadtest.git
+            if [ ! -d "/home/ec2-user/loadtest/.git" ]; then
+                echo "🛠️ No Git repository found! Removing old files..."
+                sudo rm -rf /home/ec2-user/loadtest
+                
+                echo "📦 Cloning repository..."
+                git clone https://github.com/0515-Yoonseo-Kim/loadtest.git /home/ec2-user/loadtest
             else
                 echo "🔄 Pulling latest code..."
-                cd /home/ec2-user/app
+                cd /home/ec2-user/loadtest
                 git pull origin main
             fi
 
-            echo "🐳 Checking Docker & Docker Compose..."
-            if ! command -v docker &> /dev/null
-            then
-                echo "⚠️ Docker is not installed! Installing now..."
-                sudo yum install -y docker
-                sudo systemctl start docker
-                sudo systemctl enable docker
-            fi
+            echo "📂 Creating environment files..."
+            mkdir -p /home/ec2-user/loadtest-backend
+            mkdir -p /home/ec2-user/loadtest-frontend
 
-            if ! command -v docker-compose &> /dev/null
-            then
-                echo "⚠️ Docker Compose is not installed! Installing now..."
-                sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-                sudo chmod +x /usr/local/bin/docker-compose
-            fi
+            echo "✅ Writing BACKEND_ENV to /loadtest-backend/.env..."
+            echo "${{ secrets.BACKEND_ENV }}" > /home/ec2-user/loadtest/loadtest-backend/.env
 
-            echo "📂 Checking docker-compose.yaml..."
-            if [ ! -f "/home/ec2-user/app/docker-compose.yaml" ]; then
-                echo "❌ Error: docker-compose.yaml not found in /home/ec2-user/app!"
-                exit 1
-            fi
+            echo "✅ Writing FRONTEND_ENV to /loadtest-frontend/.env.local..."
+            echo "${{ secrets.FRONTEND_ENV }}" > /home/ec2-user/loadtest/loadtest-frontend/.env.local
+
+            echo "✅ Writing NPMRC to /loadtest-frontend/.npmrc..."
+            echo "${{ secrets.NPMRC }}" > /home/ec2-user/loadtest/loadtest-frontend/.npmrc
+
+            echo "✅ Writing DB_ENV to /.env..."
+            echo "${{ secrets.DB_ENV }}" > /home/ec2-user/loadtest/.env
 
             echo "🚀 Running Docker Compose..."
-            cd /home/ec2-user/app
+            cd /home/ec2-user/loadtest
             docker-compose down
             docker-compose pull
             docker-compose up -d
