@@ -18,3 +18,10 @@ loadtest-backend/logs/*
 
 #infra
 loadtest-infra/*
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
