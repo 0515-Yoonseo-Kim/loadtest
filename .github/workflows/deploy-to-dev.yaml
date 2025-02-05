@@ -72,9 +72,9 @@ jobs:
                 sudo chmod +x /usr/local/bin/docker-compose
             fi
 
-            echo "📂 Checking docker-compose.yml..."
-            if [ ! -f "/home/ec2-user/app/docker-compose.yml" ]; then
-                echo "❌ Error: docker-compose.yml not found in /home/ec2-user/app!"
+            echo "📂 Checking docker-compose.yaml..."
+            if [ ! -f "/home/ec2-user/app/docker-compose.yaml" ]; then
+                echo "❌ Error: docker-compose.yaml not found in /home/ec2-user/app!"
                 exit 1
             fi
 
