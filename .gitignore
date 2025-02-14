@@ -17,7 +17,9 @@ loadtest-backend/dockerscript.sh
 loadtest-backend/logs/*
 
 #infra
-loadtest-infra/*
+loadtest-infra/.terraform
+loadtest-infra/dev/.terraform.lock.hcl
+loadtest-infra/dev/terraform.*
 
 # Playwright
 node_modules/
