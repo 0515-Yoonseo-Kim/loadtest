@@ -39,6 +39,22 @@ services:
       - mongo
       - redis
 
+  frontend:
+    build:
+      context: ./loadtest-frontend
+      dockerfile: Dockerfile
+    container_name: loadtest-frontend-server
+    restart: always
+    env_file:
+      - ./loadtest-frontend/.env.local
+    volumes:
+      - ./loadtest-frontend/logs:/app/logs
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+      
 volumes:
   mongo_data:
   redis_data:
