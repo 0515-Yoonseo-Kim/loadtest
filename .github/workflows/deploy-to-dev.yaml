@@ -1,0 +1,75 @@
+name: Deploy to AWS
+
+on:
+  push:
+    branches:
+      - main
+      - infra/*
+  workflow_dispatch:
+
+jobs:
+  ssh-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Check SSH Connection
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.PUBLIC_IP }} "echo 'SSH 연결 성공!'"
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: ssh-check
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy to EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.PUBLIC_IP }} << 'EOF'
+            set -e  # 에러 발생 시 즉시 종료
+
+            echo "📂 Checking Git Repository..."
+            if [ ! -d "/home/ec2-user/loadtest/.git" ]; then
+                echo "🛠️ No Git repository found! Removing old files..."
+                sudo rm -rf /home/ec2-user/loadtest
+                
+                echo "📦 Cloning repository..."
+                git clone https://github.com/0515-Yoonseo-Kim/loadtest.git /home/ec2-user/loadtest
+            else
+                echo "🔄 Pulling latest code..."
+                cd /home/ec2-user/loadtest
+                git pull origin main
+            fi
+
+            echo "✅ Writing BACKEND_ENV to /loadtest-backend/.env..."
+            echo "${{ secrets.BACKEND_ENV }}" > /home/ec2-user/loadtest/loadtest-backend/.env
+
+            echo "✅ Writing FRONTEND_ENV to /loadtest-frontend/.env.local..."
+            echo "${{ secrets.FRONTEND_ENV }}" > /home/ec2-user/loadtest/loadtest-frontend/.env.local
+
+            echo "✅ Writing NPMRC to /loadtest-frontend/.npmrc..."
+            echo "${{ secrets.NPMRC }}" > /home/ec2-user/loadtest/loadtest-frontend/.npmrc
+
+            echo "✅ Writing DB_ENV to /.env..."
+            echo "${{ secrets.DB_ENV }}" > /home/ec2-user/loadtest/.env
+
+            echo "🚀 Running Docker Compose..."
+            cd /home/ec2-user/loadtest
+            docker-compose down
+            docker-compose pull
+            docker-compose up -d
+
+            echo "🧹 Cleaning up unused Docker resources..."
+            docker system prune -af
+
+            echo "✅ Deployment completed successfully!"
+          EOF
