@@ -1,6 +1,10 @@
 # loadtest
 
-부하테스트 후속 프로젝트 : 해당 레포지토리의 코드를 수정했습니다. [https://github.com/extinctmule/ktb-BootcampChat]
+해당 레포지토리의 코드를 수정했습니다. [https://github.com/extinctmule/ktb-BootcampChat]
+
+부하테스트 후속 프로젝트
+
+부하테스트 복기용 + 스트레스 테스트 고도화 + 모니터링 고도화를 위한 프로젝트
 
 ---
 
