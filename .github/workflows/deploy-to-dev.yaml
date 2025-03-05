@@ -50,10 +50,6 @@ jobs:
                 git pull origin main
             fi
 
-            echo "📂 Creating environment files..."
-            mkdir -p /home/ec2-user/loadtest-backend
-            mkdir -p /home/ec2-user/loadtest-frontend
-
             echo "✅ Writing BACKEND_ENV to /loadtest-backend/.env..."
             echo "${{ secrets.BACKEND_ENV }}" > /home/ec2-user/loadtest/loadtest-backend/.env
 
