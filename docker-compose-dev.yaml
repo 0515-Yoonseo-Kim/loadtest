@@ -1,0 +1,55 @@
+services:
+  mongo:
+    image: "mongo:latest"
+    container_name: "loadtest-mongo-server"
+    restart: "unless-stopped"
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    networks:
+      - my_network
+
+  redis:
+    image: "redis:latest"
+    container_name: "loadtest-redis-server"
+    restart: always
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    environment:
+      REDIS_LOGLEVEL: "verbose"
+    command: redis-server --bind 0.0.0.0
+    networks:
+      - my_network
+
+  backend:
+    build:
+      context: ./loadtest-backend
+      dockerfile: Dockerfile
+    container_name: loadtest-backend-server
+    restart: always
+    env_file:
+      - ./loadtest-backend/.env
+    volumes:
+      - ./loadtest-backend/logs:/app/logs
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - my_network
+
+
+networks:
+  my_network:
+    driver: bridge
+
+volumes:
+  mongo_data:
+  redis_data:
