@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - "loadtest-frontend/**"
+      - ".github/workflows/build-and-push-to-bucket.yaml"
+  workflow_dispatch:
 
 jobs:
   build:
@@ -17,6 +19,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "18"
+
+      - name: Setup npm credentials
+        # GitHub Secrets에 저장된 .npmrc 내용을 사용자 홈 디렉토리의 .npmrc에 작성합니다.
+        run: echo "${{ secrets.NPMRC }}" > loadtest-frontend/.npmrc
+
+      - name: Setup FRONTEND_ENV
+        # GitHub Secrets에 저장된 FRONTEND_ENV 값을 loadtest-frontend/.env.local 파일에 작성합니다.
+        run: echo "${{ secrets.FRONTEND_ENV }}" > loadtest-frontend/.env.local
 
       - name: Install dependencies
         working-directory: loadtest-frontend
