@@ -64,8 +64,8 @@ jobs:
 
             echo "🚀 Running Docker Compose..."
             cd /home/ec2-user/loadtest
-            docker-compose down
-            docker-compose pull
+            docker-compose -f docker-compose-dev.yaml down
+            docker-compose -f docker-compose-dev.yaml pull
             docker-compose -f docker-compose-dev.yaml up -d
 
             echo "🧹 Cleaning up unused Docker resources..."
