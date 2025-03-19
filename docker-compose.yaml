@@ -10,6 +10,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    networks:
+      - my_network
 
   redis:
     image: "redis:latest"
@@ -22,6 +24,8 @@ services:
     environment:
       REDIS_LOGLEVEL: "verbose"
     command: redis-server --bind 0.0.0.0
+    networks:
+      - my_network
 
   backend:
     build:
@@ -34,10 +38,14 @@ services:
     volumes:
       - ./loadtest-backend/logs:/app/logs
     ports:
-      - "5000:5000"
+      - "5001:5000"
     depends_on:
       - mongo
       - redis
+
+    networks:
+      - my_network
+
   frontend:
     build:
       context: ./loadtest-frontend
@@ -52,6 +60,14 @@ services:
       - "3000:3000"
     depends_on:
       - backend
+
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
+
 volumes:
   mongo_data:
   redis_data:
