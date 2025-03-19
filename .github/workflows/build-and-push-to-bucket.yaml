@@ -43,4 +43,4 @@ jobs:
 
       - name: Upload build files to S3
         run: |
-          aws s3 sync loadtest-frontend/out s3://${{ vars.S3_BUCKET_NAME }}/frontend --delete
+          aws s3 sync loadtest-frontend/out s3://${{ vars.S3_BUCKET_NAME }} --delete
