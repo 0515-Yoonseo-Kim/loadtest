@@ -9,7 +9,7 @@ loadtest-frontend/.npmrc
 loadtest-frontend/node_modules
 loadtest-frontend/.next/*
 loadtest-frontend/logs/*
-
+loadtest-frontend/out/*
 #back
 loadtest-backend/node_modules
 loadtest-backend/.env
@@ -17,9 +17,10 @@ loadtest-backend/dockerscript.sh
 loadtest-backend/logs/*
 
 #infra
-loadtest-infra/.terraform
+loadtest-infra/dev/.terraform
 loadtest-infra/dev/.terraform.lock.hcl
 loadtest-infra/dev/terraform.*
+
 
 # Playwright
 node_modules/
