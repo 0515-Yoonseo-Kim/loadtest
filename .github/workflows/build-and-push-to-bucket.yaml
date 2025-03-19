@@ -21,11 +21,9 @@ jobs:
           node-version: "18"
 
       - name: Setup npm credentials
-        # GitHub Secrets에 저장된 .npmrc 내용을 사용자 홈 디렉토리의 .npmrc에 작성합니다.
         run: echo "${{ secrets.NPMRC }}" > loadtest-frontend/.npmrc
 
       - name: Setup FRONTEND_ENV
-        # GitHub Secrets에 저장된 FRONTEND_ENV 값을 loadtest-frontend/.env.local 파일에 작성합니다.
         run: echo "${{ secrets.FRONTEND_ENV }}" > loadtest-frontend/.env.local
 
       - name: Install dependencies
@@ -41,7 +39,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          aws-region: ap-northeast-2 # 사용하고자 하는 AWS 리전을 입력하세요
+          aws-region: ap-northeast-2
 
       - name: Upload build files to S3
         run: |
