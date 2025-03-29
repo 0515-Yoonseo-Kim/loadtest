@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source $(dirname "$0")/env.sh
+
 APP_NAME="buha-backend"
 IMAGE_URI="${IMAGE_URI}" # GitHub Actions에서 전달됨
 SECRET_NAME="${SSM_SECRET}" # GitHub Actions에서 전달됨
