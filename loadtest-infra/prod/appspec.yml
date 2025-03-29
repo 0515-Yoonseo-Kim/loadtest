@@ -1,0 +1,14 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ec2-user/app
+hooks:
+  BeforeInstall:
+    - location: scripts/cleanup.sh
+      timeout: 60
+      runas: ec2-user
+  AfterInstall:
+    - location: scripts/run.sh
+      timeout: 300
+      runas: ec2-user
