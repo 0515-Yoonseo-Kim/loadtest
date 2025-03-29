@@ -25,15 +25,16 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: ${{env.AWS_REGION}}
 
-      #- name: Login to Amazon ECR
-      #  run: |
-      #    aws ecr get-login-password --region ${{env.AWS_REGION}} \
-      #      | docker login --username AWS --password-stdin ${{ secrets.ECR_BACKEND_REGISTRY }}
+      - name: Login to Amazon ECR
+        run: |
+          aws ecr get-login-password --region ${{env.AWS_REGION}} \
+            | docker login --username AWS --password-stdin ${{ secrets.ECR_BACKEND_REGISTRY }}
 
-      #- name: Build and push Docker image to ECR
-      #  run: |
-      #    docker build -t ${{ secrets.ECR_BACKEND_REGISTRY }}/${{ secrets.ECR_BACKEND_REPOSITORY }}:$IMAGE_TAG .
-      #    docker push ${{ secrets.ECR_BACKEND_REGISTRY }}/${{ secrets.ECR_BACKEND_REPOSITORY }}:$IMAGE_TAG
+      - name: Build and push Docker image to ECR
+        working-directory: loadtest-backend
+        run: |
+          docker build --no-cache -t ${{ secrets.ECR_BACKEND_REGISTRY }}/${{ secrets.ECR_BACKEND_REPOSITORY }}:$IMAGE_TAG .
+          docker push ${{ secrets.ECR_BACKEND_REGISTRY }}/${{ secrets.ECR_BACKEND_REPOSITORY }}:$IMAGE_TAG
       # 📄 Create env.sh file with sensitive values
       - name: Generate env.sh for EC2
         working-directory: loadtest-infra/prod/scripts

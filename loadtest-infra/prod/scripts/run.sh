@@ -26,6 +26,8 @@ aws s3 cp s3://$CODEDEPLOY_BUCKET/env/.env.production /home/ec2-user/.env.produc
 aws ecr get-login-password --region ap-northeast-2 \
   | docker login --username AWS --password-stdin 851725239852.dkr.ecr.ap-northeast-2.amazonaws.com
 
+docker pull $IMAGE_URI
+
 # 기존 컨테이너 정리
 docker stop $APP_NAME 2>/dev/null || true
 docker rm $APP_NAME 2>/dev/null || true

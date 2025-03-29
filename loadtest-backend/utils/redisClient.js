@@ -50,9 +50,15 @@ class RedisClient {
         this.isCluster = false;
       }
 
-      this.client.on("connect", () => {
-        console.log("Redis Client Connected");
-        this.connected = true;
+      this.client.on("connect", async () => {
+        try {
+          const pong = await this.client.ping();
+          console.log("Redis responded to PING:", pong);
+          this.connected = true;
+        } catch (err) {
+          console.error("Redis PING failed:", err);
+          this.connected = false;
+        }
       });
 
       this.client.on("error", (err) => {
