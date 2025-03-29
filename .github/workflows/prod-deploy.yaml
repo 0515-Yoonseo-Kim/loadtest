@@ -36,7 +36,7 @@ jobs:
       #    docker push ${{ secrets.ECR_BACKEND_REGISTRY }}/${{ secrets.ECR_BACKEND_REPOSITORY }}:$IMAGE_TAG
 
       - name: Zip deployment package
-        working-directory: loadtest/loadtest-infra/prod
+        working-directory: loadtest-infra/prod
         run: |
           zip -r buha-deploy.zip appspec.yml scripts/
 
