@@ -17,7 +17,7 @@ PASSWORD_RAW=$(aws secretsmanager get-secret-value --secret-id "$SECRET_NAME" \
 PASSWORD=$(python3 -c "import urllib.parse; print(urllib.parse.quote('''$PASSWORD_RAW'''))")
 
 # S3에서 .env.production 다운로드
-aws s3 cp s3://YOUR_BUCKET_NAME/env/.env.production /home/ec2-user/.env.production
+aws s3 cp s3://$CODEDEPLOY_BUCKET/env/.env.production /home/ec2-user/.env.production
 
 # 🔐 ECR 로그인
 aws ecr get-login-password --region ap-northeast-2 \
