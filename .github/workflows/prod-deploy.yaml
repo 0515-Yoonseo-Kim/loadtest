@@ -34,6 +34,13 @@ jobs:
       #  run: |
       #    docker build -t ${{ secrets.ECR_BACKEND_REGISTRY }}/${{ secrets.ECR_BACKEND_REPOSITORY }}:$IMAGE_TAG .
       #    docker push ${{ secrets.ECR_BACKEND_REGISTRY }}/${{ secrets.ECR_BACKEND_REPOSITORY }}:$IMAGE_TAG
+      # 📄 Create env.sh file with sensitive values
+      - name: Generate env.sh for EC2
+        working-directory: loadtest-infra/prod/scripts
+        run: |
+          echo "export IMAGE_URI=${{ secrets.BACKEND_IMAGE_URI }}" > env.sh
+          echo "export SSM_SECRET=${{ secrets.SSM_SECRET }}" >> env.sh
+          chmod +x env.sh
 
       - name: Zip deployment package
         working-directory: loadtest-infra/prod
