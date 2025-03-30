@@ -42,7 +42,7 @@ jobs:
           echo "export IMAGE_URI=${{ secrets.BACKEND_IMAGE_URI }}" > env.sh
           echo "export CODEDEPLOY_BUCKET=${{secrets.S3_CODEDEPLOY_BUCKET}}" >> env.sh
           echo "export MONGO_URI=${{ secrets.MONGO_URI }}" >> env.sh
-          echo "export ECR_BACKEND_RESITRY=${{ secrets.ECR_BACKEND_RESITRY }}" >> env.sh
+          echo "export ECR_BACKEND_REGISTRY=${{ secrets.ECR_BACKEND_REGISTRY }}" >> env.sh
           chmod +x env.sh
 
       - name: Zip deployment package
