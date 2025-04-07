@@ -1,15 +1,22 @@
 # loadtest
 
-해당 레포지토리의 코드를 수정했습니다. [https://github.com/extinctmule/ktb-BootcampChat]
-
 부하테스트 후속 프로젝트
-
-부하테스트 복기용 + 스트레스 테스트 고도화 + 모니터링 고도화를 위한 프로젝트
-E2E 스트레스 테스트 코드 레포지토리 분리 / 정리 후 private 전환
-해당 레포지토리는 환경 관리 위주로 운영
+해당 레포지토리의 코드를 수정했습니다. [https://github.com/extinctmule/ktb-BootcampChat]
 
 ---
 
+## ✅ 프로젝트 개요
+
+- **목적**:
+  - 부하테스트 복기 및 코드 실험
+  - 스트레스 테스트/모니터링 고도화
+  - [대회](https://gem-waste-46b.notion.site/16f5b5b9a26d802fbe43e8a7828078e9?pvs=4)때보다 더 적은 인스턴스를 사용해 동일 수준의 부하 도달을 목표로 실험 진행
+- **개선 방향**:
+  - `local`, `dev`, `prod` 등 **환경별 파이프라인 작성**
+  - E2E 스트레스 테스트 구조 분리 및 정리 [https://github.com/0515-Yoonseo-Kim/loadtest-e2e]
+  - 관측지표 다양화
+  - 부하테스트 시나리오 다양화 및 개선
+---
 # 0. Environment Variables 설정 가이드
 **환경 변수(Environment Variables)** 설정 방법에 대한 예시 가이드(README.md 일부)입니다. 실제로 사용하시는 레포지토리나 프로젝트 구조에 맞춰 적절히 수정해서 사용하세요.
 
