@@ -22,6 +22,12 @@
 개발 환경의 차이로 인한 문제를 최대한 커버하기 위해서 `docker-compose.yaml`파일로 컨테이너를 띄울때 문제가 없도록 환경변수 위치등을 설정하였습니다.
 
 ### 각 환경 변수 설명
+#### MongoDB 관련 환경 변수 
+```ini
+# /loadtest/.env
+MONGO_INITDB_ROOT_USERNAME=username
+MONGO_INITDB_ROOT_PASSWORD=password
+```
 #### 백엔드 환경 변수
 | 변수명           | 설명                                                                    |
 |-----------------|-------------------------------------------------------------------------|
