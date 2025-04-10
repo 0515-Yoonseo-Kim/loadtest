@@ -28,16 +28,20 @@
 MONGO_INITDB_ROOT_USERNAME=username
 MONGO_INITDB_ROOT_PASSWORD=password
 ```
-#### 백엔드 환경 변수
-| 변수명           | 설명                                                                    |
-|-----------------|-------------------------------------------------------------------------|
-| **MONGO_URI**   | MongoDB 연결 문자열 (접속 계정, DB 이름, 호스트:포트 등 포함)           |
-| **JWT_SECRET**  | JWT(Json Web Token) 발급 시 사용되는 시크릿 키                          |
-| **REDIS_HOST**  | Redis 서버가 위치한 호스트(도커 환경에서는 보통 서비스명 `redis`)       |
-| **REDIS_PORT**  | Redis 서버 포트. 기본적으로 `6379`                                     |
-| **OPENAI_API_KEY** | OpenAI GPT 등 API를 사용하기 위한 API 키                              |
-| **ENCRYPTION_KEY** | 사용자 이메일 암호화 등에 사용하는 **AES-256** 키(64자리 hex)        |
-| **PASSWORD_SALT**  | 비밀번호 해싱(salt)에 사용될 문자열(32자리 hex)                      |
+#### node.js 관련 환경 변수
+ENCRYPTION_KEY는 `openssl rand -hex 32` 랜덤 생성 권장
+
+```ini
+# /loadtest/loadtest-backend/.env
+MONGO_URI=mongodb_url
+JWT_SECRET=your_jwt_secret
+REDIS_HOST=localhost
+REDIS_PORT=6379
+OPENAI_API_KEY=your_openai_key
+ENCRYPTION_KEY=your_encryption_key
+PASSWORD_SALT=your_salt_key
+```
+
 #### 프론트엔드 환경 변수
 | 변수명           | 설명                                                                    |
 |-----------------|-------------------------------------------------------------------------|
@@ -45,12 +49,6 @@ MONGO_INITDB_ROOT_PASSWORD=password
 | **NEXT_PUBLIC_ENCRYPTION_KEY**  | 특정 암호화 로직에 사용하는 키 (백엔드 환경 변수와 동일)                          |
 | **NEXT_PUBLIC_PASSWORD_SALT**  | 비밀번호 해싱 로직이 (백엔드 환경 변수와 동일)      |
 
-### 데이터베이스 환경 변수 
-	
-| 변수명           | 설명                                                                    |
-|-----------------|-------------------------------------------------------------------------|
-| **MONGO_INITDB_ROOT_USERNAME**   | 초기 루트 사용자명           |
-| **MONGO_INITDB_ROOT_PASSWORD**  | MongoDB 초기 루트 사용자 비밀번호                         |
 
 ## 1. 로컬 개발 환경(직접 실행 시)
 필요에 따라 실제 값(유저, 비밀번호, API 키)을 알맞게 수정하세요.
