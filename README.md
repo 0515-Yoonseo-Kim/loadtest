@@ -42,12 +42,27 @@ ENCRYPTION_KEY=your_encryption_key
 PASSWORD_SALT=your_salt_key
 ```
 
-#### 프론트엔드 환경 변수
-| 변수명           | 설명                                                                    |
-|-----------------|-------------------------------------------------------------------------|
-| **NEXT_PUBLIC_API_URL**   | 백엔드 API 서버 주소 (예: http://localhost:5000 또는 도메인)           |
-| **NEXT_PUBLIC_ENCRYPTION_KEY**  | 특정 암호화 로직에 사용하는 키 (백엔드 환경 변수와 동일)                          |
-| **NEXT_PUBLIC_PASSWORD_SALT**  | 비밀번호 해싱 로직이 (백엔드 환경 변수와 동일)      |
+#### 리액트 환경 변수
+node.js와 같은 암호화 키 설정 해야함
+goorm vapor 패키지를 사용하기 위해서 access token을 요청해야함. [링크](https://vapor.goorm.io/guides/installation) 참고해서 작성 
+
+```ini
+# /loadtest/loadtest-frontend/.env.local
+NEXT_PUBLIC_API_URL=http://localhost:5000
+NEXT_PUBLIC_ENCRYPTION_KEY=your_encryption_key
+NEXT_PUBLIC_PASSWORD_SALT=your_salt_key
+```
+
+```ini
+# /loadtest/loadtest-frontend/.npmrc
+
+# goorm-dev 패키지를 GitHub Packages에서 설치하기 위한 설정
+# access token 발급 필요: https://vapor.goorm.io/guides/installation 참고
+
+@goorm-dev:registry=https://npm.pkg.github.com/
+//npm.pkg.github.com/:_authToken=ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+```
 
 
 ## 1. 로컬 개발 환경(직접 실행 시)
