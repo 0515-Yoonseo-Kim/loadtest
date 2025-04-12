@@ -71,6 +71,7 @@ NEXT_PUBLIC_PASSWORD_SALT=your_salt_key
 
 
 ### 1.3 실행 및 종료 커맨드
+
 필요한 환경변수를 모두 입력하고 프로젝트 루트에서 해당 커맨드를 실행하면 실행됨
 ```sh
 docker-compose up -d
@@ -78,6 +79,6 @@ docker-compose down
 ```
 ## 2. 아키텍처 설명
 ### 2.1 개발용 단일 서버 배포
-![개발환경배포다이어그램 drawio](https://github.com/user-attachments/assets/dd75f85a-fdf9-4ac8-a5af-5979b3ba2d35)
+![개발서버아키텍쳐그림 drawio](https://github.com/user-attachments/assets/22fcd52e-dc0e-44e0-8a35-b321740c95e7)
 ### 2.2 프로덕션 용 서버 배포
 
