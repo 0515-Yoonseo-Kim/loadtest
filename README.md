@@ -81,4 +81,4 @@ docker-compose down
 ### 2.1 개발용 단일 서버 배포
 ![개발서버아키텍쳐그림 drawio](https://github.com/user-attachments/assets/22fcd52e-dc0e-44e0-8a35-b321740c95e7)
 ### 2.2 프로덕션 용 서버 배포
-
+![프로덕션_임시 drawio](https://github.com/user-attachments/assets/f63762e3-0187-4bbb-99e5-6ceb5f87b7c0)
