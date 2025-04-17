@@ -1,153 +1,85 @@
 # loadtest
 
+부하테스트 후속 프로젝트
 해당 레포지토리의 코드를 수정했습니다. [https://github.com/extinctmule/ktb-BootcampChat]
 
-부하테스트 후속 프로젝트
+## 0. 프로젝트 개요
 
-부하테스트 복기용 + 스트레스 테스트 고도화 + 모니터링 고도화를 위한 프로젝트
-E2E 스트레스 테스트 코드 레포지토리 분리 / 정리 후 private 전환
-해당 레포지토리는 환경 관리 위주로 운영
+- **목적**:
+  - 부하테스트 복기
+  - 스트레스 테스트/모니터링 고도화
+  - 최소한의 코드 수정으로 아키텍처 최적화 목표
+  - [대회](https://gem-waste-46b.notion.site/16f5b5b9a26d802fbe43e8a7828078e9?pvs=4)때보다 더 적은 인스턴스를 사용해 동일 수준의 부하 도달을 목표로 실험 진행
+- **개선 방향**:
+  - `local`, `dev`, `prod` 등 **환경별 파이프라인 작성**
+  - E2E 스트레스 테스트 구조 분리 및 정리 [https://github.com/0515-Yoonseo-Kim/loadtest-e2e]
+  - 관측지표 다양화
+  - 부하테스트 시나리오 다양화 및 개선
 
----
-
-# 0. Environment Variables 설정 가이드
-**환경 변수(Environment Variables)** 설정 방법에 대한 예시 가이드(README.md 일부)입니다. 실제로 사용하시는 레포지토리나 프로젝트 구조에 맞춰 적절히 수정해서 사용하세요.
-
-이 프로젝트는 **MongoDB**, **Redis**, **OpenAI API** 등 외부 서비스와 연동하기 위해 여러 개의 환경 변수를 사용합니다.  
+## 1. 필수 환경 설치 및 환경 변수 설정 가이드
+**환경 변수(Environment Variables)** 설정 방법에 대한 가이드입니다. 실제로 운영하는 환경에 따라 변경을 해야 동작할 수 있습니다.(로컬에서 개발/수정하는 것을 기준으로 작성이 되었고 원하는 환경에 따라 적절하게 수정해야 합니다.)
+**MongoDB**, **Redis**, **OpenAI API** 등 외부 서비스와 연동하기 위해 여러 개의 환경 변수를 사용합니다.  
 개발 환경의 차이로 인한 문제를 최대한 커버하기 위해서 `docker-compose.yaml`파일로 컨테이너를 띄울때 문제가 없도록 환경변수 위치등을 설정하였습니다.
 
-### 각 환경 변수 설명
-#### 백엔드 환경 변수
-| 변수명           | 설명                                                                    |
-|-----------------|-------------------------------------------------------------------------|
-| **MONGO_URI**   | MongoDB 연결 문자열 (접속 계정, DB 이름, 호스트:포트 등 포함)           |
-| **JWT_SECRET**  | JWT(Json Web Token) 발급 시 사용되는 시크릿 키                          |
-| **REDIS_HOST**  | Redis 서버가 위치한 호스트(도커 환경에서는 보통 서비스명 `redis`)       |
-| **REDIS_PORT**  | Redis 서버 포트. 기본적으로 `6379`                                     |
-| **OPENAI_API_KEY** | OpenAI GPT 등 API를 사용하기 위한 API 키                              |
-| **ENCRYPTION_KEY** | 사용자 이메일 암호화 등에 사용하는 **AES-256** 키(64자리 hex)        |
-| **PASSWORD_SALT**  | 비밀번호 해싱(salt)에 사용될 문자열(32자리 hex)                      |
-#### 프론트엔드 환경 변수
-| 변수명           | 설명                                                                    |
-|-----------------|-------------------------------------------------------------------------|
-| **NEXT_PUBLIC_API_URL**   | 백엔드 API 서버 주소 (예: http://localhost:5000 또는 도메인)           |
-| **NEXT_PUBLIC_ENCRYPTION_KEY**  | 특정 암호화 로직에 사용하는 키 (백엔드 환경 변수와 동일)                          |
-| **NEXT_PUBLIC_PASSWORD_SALT**  | 비밀번호 해싱 로직이 (백엔드 환경 변수와 동일)      |
-
-### 데이터베이스 환경 변수 
-	
-| 변수명           | 설명                                                                    |
-|-----------------|-------------------------------------------------------------------------|
-| **MONGO_INITDB_ROOT_USERNAME**   | 초기 루트 사용자명           |
-| **MONGO_INITDB_ROOT_PASSWORD**  | MongoDB 초기 루트 사용자 비밀번호                         |
-
-## 1. 로컬 개발 환경(직접 실행 시)
-필요에 따라 실제 값(유저, 비밀번호, API 키)을 알맞게 수정하세요.
-### 1.1 환경 변수 설정
-
-1) loadtest/.env
-```ìni
-MONGO_INITDB_ROOT_USERNAME=your_mongo_user
-MONGO_INITDB_ROOT_PASSWORD=your_mongo_passsword
+### 1.1 필수 설치 및 버전
+- **Docker** `v20` 이상
+- **Docker Compose** `v2` 이상
+- **Node.js** 최소 `v18.17.0` 이상의 이미지
+  
+### 1.2 환경 변수 파일 입력 가이드
+#### MongoDB 관련 환경 변수 
+```ini
+# /loadtest/.env
+MONGO_INITDB_ROOT_USERNAME=username
+MONGO_INITDB_ROOT_PASSWORD=password
 ```
-
-3) loadtest/loadtest-backend/.env
+#### node.js 관련 환경 변수
+암호호 키 랜덤 생성 권장 `openssl rand -hex 32`
 
 ```ini
-# 예시: .env 파일 내용
-
-# MongoDB 접속 주소
-MONGO_URI=mongodb://<your_mongo_user>:<your_mongo_password>@localhost:27017/bootcampchat?authSource=admin
-
-# JWT 발급 시 사용할 시크릿 키
+# /loadtest/loadtest-backend/.env
+MONGO_URI=mongodb://<username>:<password>@mongo:27017/bootcampchat?authSource=admin # 설정한 DB 유저이름, 패스워드 입력
 JWT_SECRET=your_jwt_secret
-
-# Redis 접속 정보
 REDIS_HOST=localhost
 REDIS_PORT=6379
-
-# OpenAI API 키
-OPENAI_API_KEY=your_openai_api_key
-
-# 사용자 이메일 암호화 등에 사용될 AES-256 암호화 키(64자리 hex)
+OPENAI_API_KEY=your_openai_key
 ENCRYPTION_KEY=your_encryption_key
-
-# 비밀번호 해싱(salt)용 문자열(32자리 hex)
 PASSWORD_SALT=your_salt_key
 ```
 
-3) loadtest/loadtest-frontend/.env.local
+#### 리액트 환경 변수
+node.js와 같은 암호화 키 설정 해야함
+goorm vapor 패키지를 사용하기 위해서 access token을 요청해야함. [링크](https://vapor.goorm.io/guides/installation) 참고해서 작성 
 
-```ìni
+```ini
+# /loadtest/loadtest-frontend/.env.local
 NEXT_PUBLIC_API_URL=http://localhost:5000
 NEXT_PUBLIC_ENCRYPTION_KEY=your_encryption_key
 NEXT_PUBLIC_PASSWORD_SALT=your_salt_key
 ```
-### 1.2 실행 커맨드
-```sh
-./run.sh start <모드>
-./run.sh stop <모드>
-./run.sh restart <모드>
-```
-모드는 `dev` `prod` 2가지이고 입력이 들어오지 않을 시 기본 값은 dev이다.
-
-## 2. Docker Compose 환경에서 실행 시
-
-### 2.1 docker-compose.yml에서 env_file 사용
-
-`docker-compose.yml`에 아래와 같이 **env_file**을 설정해두었다면,
-
-```yaml
-services:
-  backend:
-    build:
-      context: ./loadtest-backend
-      dockerfile: Dockerfile
-    container_name: loadtest-backend-server
-    restart: always
-    # <-- env_file 옵션
-    env_file:
-      - ./loadtest-backend/.env
-    ports:
-      - "5000:5000"
-    depends_on:
-      - mongo
-      - redis
-  # ...
-```
-
-- `env_file`에 지정된 경로(`./loadtest-backend/.env`)의 파일이 **컨테이너 환경 변수**로 로드됩니다.
-- Docker Compose가 **컨테이너** 내부에 `.env` 파일을 직접 복사해 넣는 것은 아니지만, **컨테이너 실행 시점**에 `process.env`에 값을 주입합니다.
-- 따라서 `loadtest-backend/.env` 파일에 위에서 언급한 환경 변수를 동일하게 넣어주시면 됩니다.
 
 ```ini
-# 예시: loadtest-backend/.env (Docker Compose에서 사용)
+# /loadtest/loadtest-frontend/.npmrc
 
-MONGO_URI=mongodb://<유저>:<비밀번호>@mongo:27017/bootcampchat?authSource=admin
-JWT_SECRET=your_jwt_secret
-REDIS_HOST=redis
-REDIS_PORT=6379
-OPENAI_API_KEY=your_openai_api_key
-ENCRYPTION_KEY=your_encryption_key
-PASSWORD_SALT=your_salt_key
+# goorm-dev 패키지를 GitHub Packages에서 설치하기 위한 설정
+# access token 발급 필요: https://vapor.goorm.io/guides/installation 참고
+
+@goorm-dev:registry=https://npm.pkg.github.com/
+//npm.pkg.github.com/:_authToken=ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
 ```
 
-- 이때, **MongoDB**는 `mongo`라는 서비스명으로 접근하고,  
-- **Redis**는 `redis`라는 서비스명으로 접근해야 합니다. (Compose가 내부 네트워크를 자동으로 설정해줌)
 
-### 2.2 Docker Compose 네트워크에서의 주의사항
+### 1.3 실행 및 종료 커맨드
 
-- **`localhost`** 는 컨테이너 자기 자신을 의미하므로, 다른 컨테이너(DB, Redis 등)에 접속할 때는 반드시 **서비스명**을 사용해야 합니다.
-- 예: `MONGO_URI=mongodb://<유저>:<비번>@mongo:27017/<DB>?authSource=admin`
-
-### 2.3 실행 예시
-
+필요한 환경변수를 모두 입력하고 프로젝트 루트에서 해당 커맨드를 실행하면 실행됨
 ```sh
 docker-compose up -d
 docker-compose down
 ```
+## 2. 아키텍처 설명
+### 2.1 개발용 단일 서버 배포
+<img src="https://github.com/user-attachments/assets/22fcd52e-dc0e-44e0-8a35-b321740c95e7" width="600"/>
 
----
-
-## 4. 주의 사항
- - **Docker Compose**로 배포 시, `.env` 파일 내용이 자동으로 이미지 안에 포함되지 않고, **실행 시점**에 주입됩니다.  
+### 2.2 프로덕션 용 서버 배포
+<img src="https://github.com/user-attachments/assets/f63762e3-0187-4bbb-99e5-6ceb5f87b7c0" width="600"/>
