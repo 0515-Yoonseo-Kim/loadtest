@@ -83,3 +83,7 @@ docker-compose down
 
 ### 2.2 프로덕션 용 서버 배포
 <img src="https://github.com/user-attachments/assets/f63762e3-0187-4bbb-99e5-6ceb5f87b7c0" width="600"/>
+
+## 3. 테스트 관련
+테스트 코드 관련 및 실험 내용은 해당 레포지토리 참고
+https://github.com/0515-Yoonseo-Kim/loadtest-e2e
