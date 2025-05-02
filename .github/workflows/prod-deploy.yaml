@@ -35,7 +35,7 @@ jobs:
         run: |
           docker build --no-cache -t ${{ secrets.ECR_BACKEND_REGISTRY }}/${{ secrets.ECR_BACKEND_REPOSITORY }}:$IMAGE_TAG .
           docker push ${{ secrets.ECR_BACKEND_REGISTRY }}/${{ secrets.ECR_BACKEND_REPOSITORY }}:$IMAGE_TAG
-      # 📄 Create env.sh file with sensitive values
+
       - name: Generate env.sh for EC2
         working-directory: loadtest-infra/prod/scripts
         run: |
@@ -44,6 +44,13 @@ jobs:
           echo "export MONGO_URI=${{ secrets.MONGO_URI }}" >> env.sh
           echo "export ECR_BACKEND_REGISTRY=${{ secrets.ECR_BACKEND_REGISTRY }}" >> env.sh
           chmod +x env.sh
+
+      - name: Set permissions before zipping
+        working-directory: loadtest-infra/prod
+        run: |
+          chmod -R 755 scripts
+          chown -R root:root scripts
+          chmod 644 appspec.yml
 
       - name: Zip deployment package
         working-directory: loadtest-infra/prod
