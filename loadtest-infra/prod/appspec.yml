@@ -16,9 +16,6 @@ hooks:
     - location: scripts/cleanup.sh
       timeout: 60
       runas: ec2-user
-    - location: scripts/fix-permission.sh
-      timeout: 60
-      runas: ec2-user
   AfterInstall:
     - location: scripts/run.sh
       timeout: 300
