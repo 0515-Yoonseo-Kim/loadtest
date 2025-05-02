@@ -16,12 +16,12 @@ hooks:
   BeforeInstall:
     - location: scripts/cleanup.sh
       timeout: 60
-      runas: root
+      runas: ec2-user
   AfterInstall:
     - location: scripts/run.sh
       timeout: 300
-      runas: root
+      runas: ec2-user
   ApplicationStart:
     - location: scripts/logging.sh
       timeout: 60
-      runas: root
+      runas: ec2-user
