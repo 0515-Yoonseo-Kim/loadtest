@@ -12,3 +12,7 @@ hooks:
     - location: scripts/run.sh
       timeout: 300
       runas: ec2-user
+  ApplicationStart:
+    - location: scripts/logging.sh
+      timeout: 60
+      runas: ec2-user
