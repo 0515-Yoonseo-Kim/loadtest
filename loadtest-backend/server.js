@@ -102,7 +102,12 @@ app.use((err, req, res, next) => {
 
 // 서버 시작
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(process.env.MONGO_URI, {
+    maxPoolSize: 100,
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 10000,
+    readPreference: "secondaryPreferred",
+  })
   .then(() => {
     console.log("MongoDB Connected");
     server.listen(PORT, "0.0.0.0", () => {
