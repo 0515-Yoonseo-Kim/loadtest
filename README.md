@@ -83,3 +83,34 @@ docker-compose down
 
 ### 2.2 프로덕션 용 서버 배포
 <img src="https://github.com/user-attachments/assets/f63762e3-0187-4bbb-99e5-6ceb5f87b7c0" width="600"/>
+
+### 배포 자동화 흐름 (CI/CD)
+🛠️ 사용 기술
+CI/CD: GitHub Actions, AWS ECR, S3, CodeDeploy, EC2 Auto Scaling
+관찰/모니터링: CloudWatch
+
+🛠️ 환경 설정
+민감한 환경변수는 .env.production을 S3에서 인스턴스로 수동 다운로드 후 마운트
+Redis, MongoDB 등은 Docker compose 또는 AWS 기반으로 구성
+
+Code Deploy의 배포 구성 `CodeDeployDefault.OneAtATime`을 이용한 롤링 업데이트 전략
+
+production-backend-asg 기준 무중단 배포
+
+```
+1. 테스트/빌드 → Docker 이미지 빌드 및 태깅
+
+2. ECR에 이미지 푸시
+
+3. S3에 appspec.yml, deploy.zip 업로드
+
+4. CodeDeploy 배포 트리거
+
+5. CodeDeploy + EC2 Auto Scaling Group:
+
+6. 오토스케일링 인스턴스에 배포
+```
+
+
+
+
