@@ -106,6 +106,7 @@ mongoose
     maxPoolSize: 100,
     serverSelectionTimeoutMS: 5000,
     socketTimeoutMS: 10000,
+    readPreference: "secondaryPreferred",
   })
   .then(() => {
     console.log("MongoDB Connected");
