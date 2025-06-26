@@ -1,12 +1,12 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const mongoose = require("mongoose");
 const http = require("http");
 const socketIO = require("socket.io");
 const path = require("path");
 const { router: roomsRouter, initializeSocket } = require("./routes/api/rooms");
 const routes = require("./routes");
+const connectDB = require("./config/db");
 
 const app = express();
 const server = http.createServer(app);
@@ -101,6 +101,20 @@ app.use((err, req, res, next) => {
 });
 
 // 서버 시작
+async function startServer() {
+  try {
+    await connectDB();
+    server.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error("Server startup error:", err);
+    process.exit(1);
+  }
+}
+
+startServer();
+/*
 mongoose
   .connect(process.env.MONGO_URI, {
     maxPoolSize: 100,
@@ -120,5 +134,6 @@ mongoose
     console.error("Server startup error:", err);
     process.exit(1);
   });
+*/
 
 module.exports = { app, server };
