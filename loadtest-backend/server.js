@@ -40,6 +40,9 @@ const corsOptions = {
   exposedHeaders: ["x-auth-token", "x-session-id"],
 };
 
+if (process.env.NODE_ENV === "development") {
+  corsOptions.origin.push("http://localhost:3000");
+}
 // 기본 미들웨어
 app.use(cors(corsOptions));
 app.use(express.json());
